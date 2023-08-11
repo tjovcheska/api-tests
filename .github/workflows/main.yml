@@ -1,0 +1,51 @@
+name: Docker Build Pipeline
+
+on:
+  push:
+    paths:
+      - Gemfile
+      - Gemfile.lock
+  pull_request:
+    paths:
+      - Gemfile
+      - Gemfile.lock
+      - '**/*.rb'   # Modify this to match the file extension of your code files
+
+jobs:
+  build_base_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker Base Image
+        if: github.event_name == 'push' && github.event_path == 'Gemfile'
+        run: docker build -t myapp-base -f Docker.base .
+
+  build_code_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker Code Image
+        if: github.event_name == 'push' && github.event_path != 'Gemfile'
+        run: docker build -t myapp-code -f Dockerfile .
+
+      - name: Push Docker Image
+        if: github.event_name == 'push' && github.event_path != 'Gemfile'
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push myapp-code
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build and Deploy
+        if: github.event_name == 'push' && github.event_path != 'Gemfile'
+        run: |
+          # Add your deployment steps here
