@@ -19,7 +19,7 @@ jobs:
             doc:
               - Gemfile
       - name: Build Docker Base Image
-        if: steps.changed-files-yaml.outputs.test_any_changed == 'true'  
+        if: steps.changed-files-yaml.outputs.doc_any_changed == 'true'  
         run: docker build -t myapp-base -f Dockerfile.base .
 
   build_code_image:
