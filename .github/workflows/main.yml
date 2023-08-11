@@ -2,6 +2,7 @@ name: Docker Build Pipeline
 
 on:
   push:
+    branches: [ "main" ]
     paths:
       - Gemfile
       - Gemfile.lock
