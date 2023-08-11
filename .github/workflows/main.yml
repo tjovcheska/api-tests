@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker Base Image
-        if: github.event_name == 'push' && github.event_path == 'Gemfile'
+        if: ${{ github.event_name == 'push' && github.event_path == 'Gemfile' }}
         run: docker build -t myapp-base -f Dockerfile.base .
 
   build_code_image:
@@ -32,5 +32,5 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker Code Image
-        if: github.event_name == 'push' && github.event_path != 'Gemfile'
+        if: ${{ github.event_name == 'push' && github.event_path != 'Gemfile' }}
         run: docker build -t myapp-code -f Dockerfile.runner .
