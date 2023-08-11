@@ -3,14 +3,6 @@ name: Docker Build Pipeline
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - Gemfile
-      - Gemfile.lock
-  pull_request:
-    paths:
-      - Gemfile
-      - Gemfile.lock
-      - '**/*.rb'   # Modify this to match the file extension of your code files
   workflow_dispatch:
 
 jobs:
@@ -19,9 +11,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
+      - name: Get changed files
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v37
+        with:
+          files_yaml: |
+            doc:
+              - Gemfile
       - name: Build Docker Base Image
-        if: ${{ github.event_name == 'push' && github.event_path == 'Gemfile' }}
+        if: steps.changed-files-yaml.outputs.test_any_changed == 'true'  
         run: docker build -t myapp-base -f Dockerfile.base .
 
   build_code_image:
