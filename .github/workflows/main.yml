@@ -10,6 +10,7 @@ on:
       - Gemfile
       - Gemfile.lock
       - '**/*.rb'   # Modify this to match the file extension of your code files
+  workflow_dispatch:
 
 jobs:
   build_base_image:
