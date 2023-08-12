@@ -14,13 +14,14 @@ pipeline {
             steps {
                 echo 'Builing base image for api-tests'
                 sh "docker build --no-cache -t teodorajovcheska7/api-tests-base . -f Dockerfile.base"
-
+                sh "docker push teodorajovcheska7/api-tests-base:latest"
             }
         }
         stage('docker-build-test-runner') {
             steps {
                 echo 'Building runner image for api-tests'
                 sh "docker build --no-cache -t teodorajovcheska7/api-tests-runner . -f Dockerfile.runner"
+                sh "docker push teodorajovcheska7/api-tests-runner:latest"
             }
         }
     }
