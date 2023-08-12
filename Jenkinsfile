@@ -8,7 +8,7 @@ pipeline {
             when {
                 anyOf {
                     changeset 'Gemfile'
-                    changeSet 'Dockerfile.base'
+                    changeset 'Dockerfile.base'
                 }
             }
             steps {
